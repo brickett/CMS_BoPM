@@ -7,6 +7,7 @@ library(ggplot2)
 library(dplyr)
 library(magrittr)
 library(broom)
+library(tidyr)
 
 #set directory to GitHub repo
 setwd("C:/Users/bjr21/Documents/GitHub/CMS_BoPM")
@@ -92,17 +93,14 @@ df_active$UseCode.f <- factor(df_active$UseCode)
 # Run analysis
 CostModel <- summary(lm(TotCost ~ SqFt + NumPark + UseCode.f +
                           GAS + ELECTRICITY + WaterSewer + HVAC + ELECTRIC + PLUMBING + Lamps + Janitor + Waste + Pest + ELEVATOR +
-                          Fire + Snow + Lawn + Security + Safety + Guard +
+                          Fire + Snow + Lawn + Security + Guard +
                           Zip.f, data = df_active ))
 
 Tidy_CostModel <- tidy(CostModel)
 
-df_active_Clean <- df_active %>% drop_na(SqFt, NumPark, UseCode.f, Zip.f)
+df_active_Clean <- df_active %>% drop_na(SqFt, NumPark, UseCode.f, Zip.f, GAS, ELECTRICITY, WaterSewer, HVAC, ELECTRIC, PLUMBING, Lamps, Janitor, Waste, Pest, ELEVATOR, Fire, Snow, Lawn, Security, Guard)
 
 df_active_Clean$Residuals <- CostModel$residuals
 
 #write to file
 write.csv(df_active_Clean, "residuals.csv")
-
-
-
